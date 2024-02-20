@@ -1,0 +1,34 @@
+[language]
+name = "typescript"
+binary = "node"
+version = "3.10"
+file_extension = "ts"
+
+[project]
+dependencies = []
+dev_dependencies = ["pytest"]
+
+[project.tool]
+binary = "npm"
+
+[project.tool.commands]
+add_production_depenency = ["add"]
+add_development_dependency = ["add", "-group", "dev"]
+
+[layout]
+code.source = "src"
+code.test = "test"
+
+[source]
+leet='''
+class Solution:
+    pass
+
+def main():
+    print("Hello, World!")
+
+if __name__ == '__main__':
+    main()
+'''
+
+main='''

@@ -1,0 +1,32 @@
+[language]
+binary = "python"
+version = "3.10"
+
+[project]
+dependencies = []
+dev_dependencies = ["pytest"]
+
+[project.tool]
+binary = "poetry"
+
+[project.tool.commands]
+add_production_depenency = ["add"]
+add_development_dependency = ["add", "-group", "dev"]
+
+[layout]
+code.source = "src"
+code.test = "test"
+
+[source]
+leet='''
+class Solution:
+    pass
+
+def main():
+    print("Hello, World!")
+
+if __name__ == '__main__':
+    main()
+'''
+
+main='''
