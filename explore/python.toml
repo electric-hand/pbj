@@ -1,6 +1,8 @@
 [language]
 binary = "python"
 version = "3.10"
+name = "python"
+file_extension = "py"
 
 [project]
 dependencies = []
@@ -8,17 +10,19 @@ dev_dependencies = ["pytest"]
 
 [project.tool]
 binary = "poetry"
+makes_base_directory = true
 
 [project.tool.commands]
-add_production_depenency = ["add"]
+initialize = ["new"]
+add_dependency = ["add"]
 add_development_dependency = ["add", "-group", "dev"]
 
-[layout]
-code.source = "src"
-code.test = "test"
+[code.directories]
+source = "$project_name"
+test = "tests"
 
-[source]
-leet='''
+[[code.source]]
+contents = '''
 class Solution:
     pass
 
@@ -28,5 +32,29 @@ def main():
 if __name__ == '__main__':
     main()
 '''
+file = "main.py"
 
-main='''
+[[code.source]]
+contents = '''
+def sum(addend: int, addend_two: int) -> int:
+    return addened + addend_two
+'''
+file = "main.py"
+
+[[code.test]]
+contents = '''
+from $project_name import 
+'''
+file = "test.py"
+
+[[config]]
+contents = '''
+{
+    "python.testing.pytestArgs": [
+        "tests"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true
+}
+'''
+file = ".vscode/settings.json"

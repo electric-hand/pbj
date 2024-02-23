@@ -1,26 +1,41 @@
 [language]
-name = "typescript"
 binary = "node"
-version = "3.10"
 file_extension = "ts"
+name = "typescript"
+version = "3.10"
 
 [project]
 dependencies = []
-dev_dependencies = ["pytest"]
+dev_dependencies = [
+  "typescript",
+  "@types/node",
+  "ts-node",
+  "ts-node-dev",
+  "jest",
+  "@types/jest",
+  "ts-jest",
+  "eslint",
+  "@typescript-eslint/parser",
+  "@typescript-eslint/eslint-plugin",
+  "prettier",
+  "eslint-config-prettier",
+]
 
 [project.tool]
 binary = "npm"
+makes_base_directory = false
 
 [project.tool.commands]
-add_production_depenency = ["add"]
-add_development_dependency = ["add", "-group", "dev"]
+initialize = ["create", "-y"]
+add_dependency = ["add"]
+add_development_dependency = ["add", "--development"]
 
-[layout]
-code.source = "src"
-code.test = "test"
+[code.directories]
+source = "src"
+test = "test"
 
-[source]
-leet='''
+[[code.source]]
+contents = '''
 class Solution:
     pass
 
@@ -30,5 +45,86 @@ def main():
 if __name__ == '__main__':
     main()
 '''
+file = "main.ts"
 
-main='''
+[[code.source]]
+contents = '''
+export function _(input: number[]): number[] {
+  return [];
+}
+'''
+file = "main.ts"
+
+[[code.test]]
+contents = '''
+import { describe, expect, test } from "@jest/globals";
+import { _ } from "../src/main";
+
+describe("tests should pass", () => {
+  test("one", () => {
+    const inputOne: number[] = [];
+    const expectedOutput: number[] = [];
+    const outputOne = _(inputOne);
+    expect(outputOne).toEqual(expectedOutput);
+  });
+
+  test("two", () => {
+    const inputTwo: number[] = [];
+    const expectedOutput: number[] = [];
+    const outputTwo = _(inputTwo);
+    expect(outputTwo).toEqual(expectedOutput);
+  });
+});
+'''
+file = "test_it.ts"
+
+[[config]]
+contents = '''
+module.exports = {
+  preset: "ts-jest",
+  testEnvironment: "node",
+};
+'''
+file = "jest.config.js"
+
+[[config]]
+contents = '''
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noImplicitAny": true,
+    "outDir": "dist",
+    "sourceMap": true,
+    "strict": true,
+    "target": "es6"
+  },
+  "lib": ["es2015"]
+}
+'''
+file = "tsconfig.json"
+
+[[config]]
+contents = '''
+module.exports = {
+  env: {
+    es2022: true,
+    node: true,
+  },
+  extends: [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier",
+  ],
+  ignorePatterns: ["dist", "build"],
+  parser: "@typescript-eslint/parser",
+  parserOptions: {
+    ecmaVersion: "latest",
+    sourceType: "module",
+  },
+  plugins: ["@typescript-eslint"],
+  rules: {},
+};
+'''
+file = ".eslintrc.js"
