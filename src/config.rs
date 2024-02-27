@@ -1,7 +1,10 @@
 #![allow(dead_code)]
+use std::fs;
+
 use serde::Deserialize;
 
 type Path = String;
+const PROJECT_NAME_REPLACEMENT: &str="$PROJECT_NAME";
 
 #[derive(Debug, Deserialize)]
 pub struct TestDrivenConfig {
@@ -57,4 +60,18 @@ pub struct CodeDirectories {
 pub struct FileSpec {
     contents: String,
     file: Path,
+    variant: Option<String>
+}
+
+pub fn load_configuration(project_name: String, language: String) -> TestDrivenConfig {
+    let path = format!("./templates/{language}.toml");
+    println!("{}", path);
+    let toml_file = fs::read_to_string(path).expect("this to work");
+    let mut config: TestDrivenConfig = toml::from_str(&toml_file).expect("bad toml");
+    let test_files = &mut config.code.test;
+    for file in test_files {
+        let new_file_contents = file.contents.replace(PROJECT_NAME_REPLACEMENT, &project_name);
+        file.contents = new_file_contents;
+    }
+    config
 }

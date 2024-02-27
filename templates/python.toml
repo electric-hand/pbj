@@ -18,7 +18,7 @@ add_dependency = ["add"]
 add_development_dependency = ["add", "-group", "dev"]
 
 [code.directories]
-source = "$project_name"
+source = "$PROJECT_NAME"
 test = "tests"
 
 [[code.source]]
@@ -33,6 +33,7 @@ if __name__ == '__main__':
     main()
 '''
 file = "main.py"
+variant = "leetcode"
 
 [[code.source]]
 contents = '''
@@ -43,7 +44,7 @@ file = "main.py"
 
 [[code.test]]
 contents = '''
-from $project_name import 
+from $PROJECT_NAME import 
 '''
 file = "test.py"
 

@@ -46,6 +46,7 @@ if __name__ == '__main__':
     main()
 '''
 file = "main.ts"
+variant = "leetcode"
 
 [[code.source]]
 contents = '''
