@@ -2,8 +2,7 @@ use clap::{Parser, ValueEnum};
 
 #[derive(Debug, Parser)]
 #[command(version, about, long_about = None)]
-pub(crate) struct Cli {
-
+pub struct Cli {
     /// The name of the project to generate.
     #[arg()]
     pub project_name: String,
@@ -14,16 +13,14 @@ pub(crate) struct Cli {
 
     /// the kind of project to generate
     #[arg(value_enum, short, long)]
-    pub variant: Option<CodeVariant>
-
+    pub variant: Option<CodeVariant>,
 }
 
 /// Doc comment
 #[derive(ValueEnum, Clone, Debug)]
-pub(crate) enum CodeVariant {
+pub enum CodeVariant {
     /// leet code ready project
     Leetcode,
     /// generic project (default)
-    Basic
+    Basic,
 }
-

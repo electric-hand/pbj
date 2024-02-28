@@ -1,19 +1,12 @@
 use clap::Parser;
-
-use crate::config::load_configuration;
-use crate::project_creator::create_project;
-use crate::parser::Cli;
-
-pub mod config;
-pub mod parser;
-pub mod project_creator;
-
+use tddme::config::load_configuration;
+use tddme::parser::Cli;
+use tddme::project_creator::create_project;
 
 fn main() {
-
     let args = Cli::parse();
-    let project = args.project_name;
-    let language = args.language;
-    let config = load_configuration(project, language);
-    create_project(config);
+    let project = &args.project_name;
+    let language = &args.language;
+    let config = &load_configuration(project, language);
+    create_project(project, config);
 }

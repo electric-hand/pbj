@@ -23,7 +23,7 @@ dev_dependencies = [
 
 [project.tool]
 binary = "npm"
-makes_base_directory = false
+initializes_in_project_directory = true
 
 [project.tool.commands]
 initialize = ["create", "-y"]
