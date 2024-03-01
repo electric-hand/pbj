@@ -15,7 +15,7 @@ initializes_in_project_directory = false
 [project.tool.commands]
 initialize = ["new", "$PROJECT_NAME"]
 add_dependency = ["add"]
-add_development_dependency = ["add", "-group", "dev"]
+add_development_dependency = ["add", "--group", "dev"]
 
 [code.directories]
 source = "$PROJECT_NAME"

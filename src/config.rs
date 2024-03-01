@@ -1,9 +1,8 @@
 #![allow(dead_code)]
-use std::fs;
-
 use serde::Deserialize;
+use std::fs;
+use std::path::PathBuf;
 
-type Path = String;
 const PROJECT_NAME_REPLACEMENT: &str = "$PROJECT_NAME";
 
 #[derive(Debug, Deserialize)]
@@ -52,14 +51,14 @@ pub struct Code {
 
 #[derive(Debug, Deserialize)]
 pub struct CodeDirectories {
-    pub source: Path,
-    pub test: Path,
+    pub source: PathBuf,
+    pub test: PathBuf,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct FileSpec {
     pub contents: String,
-    pub file: Path,
+    pub file: PathBuf,
     pub variant: Option<String>,
 }
 

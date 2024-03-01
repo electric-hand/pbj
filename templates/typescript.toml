@@ -28,7 +28,7 @@ initializes_in_project_directory = true
 [project.tool.commands]
 initialize = ["create", "-y"]
 add_dependency = ["add"]
-add_development_dependency = ["add", "--development"]
+add_development_dependency = ["add", "--save-dev"]
 
 [code.directories]
 source = "src"
