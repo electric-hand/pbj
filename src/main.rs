@@ -8,5 +8,5 @@ fn main() {
     let project = &args.project_name;
     let language = &args.language;
     let config = &load_configuration(project, language);
-    create_project(project, config);
+    create_project(project, config, &args.variant);
 }

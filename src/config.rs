@@ -65,6 +65,8 @@ pub struct FileSpec {
 
 pub fn load_configuration(project_name: &str, language: &str) -> TestDrivenConfig {
     let path = format!("./templates/{language}.toml");
-    let toml_file = fs::read_to_string(path).expect("this to work").replace(PROJECT_NAME_REPLACEMENT, &project_name);
-    toml::from_str(&toml_file).expect("bad toml")
+    let toml_file = fs::read_to_string(path)
+        .expect("Unable to read toml in to string.")
+        .replace(PROJECT_NAME_REPLACEMENT, &project_name);
+    toml::from_str(&toml_file).expect("toml parsing failed.")
 }
