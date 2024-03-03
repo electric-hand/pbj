@@ -40,6 +40,7 @@ pub struct ProjectToolCommands {
     pub initialize: Vec<String>,
     pub add_development_dependency: Vec<String>,
     pub add_dependency: Vec<String>,
+    pub run_tests: Vec<String>,
 }
 
 #[derive(Debug, Deserialize)]

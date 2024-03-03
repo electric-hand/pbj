@@ -29,6 +29,7 @@ initializes_in_project_directory = true
 initialize = ["create", "-y"]
 add_dependency = ["add"]
 add_development_dependency = ["add", "--save-dev"]
+run_tests = ["test"]
 
 [code.directories]
 source = "src"

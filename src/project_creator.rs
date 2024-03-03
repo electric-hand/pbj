@@ -130,22 +130,13 @@ fn check_binaries(config: &TestDrivenConfig) {
         ));
 }
 
-fn initialize_directory(config: &ProjectTool) {
+fn initialize_directory(project_tool: &ProjectTool) {
     run_command(
-        &config.binary,
-        &config.commands.initialize,
+        &project_tool.binary,
+        &project_tool.commands.initialize,
         &format!(
             "Unable to initialize directory using tool: {} and arguments: {:?}",
-            config.binary, config.commands.initialize
-        ),
-    );
-
-    run_command(
-        &config.binary,
-        &config.commands.initialize,
-        &format!(
-            "Unable to initialize directory using tool: {} and arguments: {:?}",
-            config.binary, config.commands.initialize
+            project_tool.binary, project_tool.commands.initialize
         ),
     );
 }

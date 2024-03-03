@@ -16,6 +16,7 @@ initializes_in_project_directory = false
 initialize = ["new", "$PROJECT_NAME"]
 add_dependency = ["add"]
 add_development_dependency = ["add", "--group", "dev"]
+run_tests = ["run", "pytest"]
 
 [code.directories]
 source = "$PROJECT_NAME"
@@ -38,13 +39,17 @@ variant = "leetcode"
 [[code.source]]
 contents = '''
 def sum(addend: int, addend_two: int) -> int:
-    return addened + addend_two
+    return addend + addend_two
 '''
 file = "main.py"
 
 [[code.test]]
 contents = '''
-from $PROJECT_NAME import 
+from $PROJECT_NAME import sum
+
+def test_sum():
+    assert 4 == sum(2, 2)
+
 '''
 file = "test.py"
 
