@@ -30,20 +30,59 @@ add_dependency = ["add"]
 add_development_dependency = ["add", "--save-dev"]
 run_tests = ["test"]
 
+[[project.post.commands]]
+command = "npx"
+args = [
+  "npm-add-script",
+  "-k",
+  "start-dev",
+  "-v",
+  "npx ts-node-dev --respawn --pretty --transpile-only src/index.ts",
+  "--force",
+]
+
+[[project.post.commands]]
+command = "npx"
+args = [
+  "npm-add-script",
+  "-k",
+  "test",
+  "-v",
+  "npx jest",
+  "--force",
+]
+
+[[project.post.commands]]
+command = "npx"
+args = [
+  "npm-add-script",
+  "-k",
+  "prettier",
+  "-v",
+  "npx prettier . --write",
+  "--force",
+]
+
+[[project.post.commands]]
+command = "npx"
+args = [
+  "npm-add-script",
+  "-k",
+  "lint",
+  "-v",
+  "npx eslint .",
+  "--force",
+]
+
 [code.directories]
 source = "src"
 test = "test"
 
 [[code.source]]
 contents = '''
-class Solution:
-    pass
-
-def main():
-    print("Hello, World!")
-
-if __name__ == '__main__':
-    main()
+export function leetCodeFunction(arg1: string, arg2: string): string {
+  return arg1 + arg2;
+}
 '''
 file = "main.ts"
 variant = "leet"
@@ -77,7 +116,25 @@ describe("tests should pass", () => {
   });
 });
 '''
-file = "test_it.ts"
+file = "main.test.ts"
+
+[[code.test]]
+contents = '''
+import { describe, expect, test } from "@jest/globals";
+import { leetCodeFunction } from "../src/main";
+
+describe("tests should pass", () => {
+  test("one", () => {
+    const inputOne = "yes";
+    const inputTwo = "no";
+    const expectedOutput = "yesno";
+    const outputOne = leetCodeFunction(inputOne, inputTwo);
+    expect(outputOne).toEqual(expectedOutput);
+  });
+});
+'''
+file = "main.test.ts"
+variant = "leet"
 
 [[config]]
 contents = '''

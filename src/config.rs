@@ -27,6 +27,7 @@ pub struct Project {
     pub dependencies: Vec<String>,
     pub dev_dependencies: Vec<String>,
     pub tool: ProjectTool,
+    pub post: Option<ProjectPost>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -41,6 +42,17 @@ pub struct ProjectToolCommands {
     pub add_development_dependency: Vec<String>,
     pub add_dependency: Vec<String>,
     pub run_tests: Vec<String>,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct ProjectPost {
+    pub commands: Vec<Command>,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct Command {
+    pub command: String,
+    pub args: Vec<String>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -70,7 +82,6 @@ pub fn default_variant() -> String {
 }
 
 pub fn load_configuration(project_name: &str, language: &str) -> TestDrivenConfig {
-
     if let Some(template) = get_template(language) {
         let template = template.replace(PROJECT_NAME_REPLACEMENT, &project_name);
         toml::from_str(&template).expect("toml parsing failed.")

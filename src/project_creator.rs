@@ -1,4 +1,4 @@
-use crate::config::{FileSpec, ProjectTool, TestDrivenConfig, default_variant};
+use crate::config::{default_variant, FileSpec, ProjectPost, ProjectTool, TestDrivenConfig};
 use std::collections::HashMap;
 use std::fs::File;
 use std::io::Write;
@@ -26,7 +26,8 @@ pub fn create_project(
         &config.project.tool.commands.add_development_dependency,
         &config.project.dev_dependencies,
     );
-    write_all_files(config, variant)
+    write_all_files(config, variant);
+    run_post_commands(&config.project.post);
 }
 
 fn initialize_root(project_name: &str, prefix: &str, config: &TestDrivenConfig) {
@@ -141,4 +142,16 @@ fn initialize_directory(project_tool: &ProjectTool) {
             project_tool.binary, project_tool.commands.initialize
         ),
     );
+}
+
+fn run_post_commands(post: &Option<ProjectPost>) {
+    if let Some(post) = post {
+        for command in &post.commands {
+            let error_message = format!(
+                "Unable to run command {} with args {:?}",
+                &command.command, &command.args
+            );
+            run_command(&command.command, &command.args, &error_message)
+        }
+    }
 }
