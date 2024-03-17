@@ -1,7 +1,9 @@
 #![allow(dead_code)]
 use serde::Deserialize;
-use std::fs;
 use std::path::PathBuf;
+use crate::parser::CodeVariant;
+
+use crate::templates::get_template;
 
 const PROJECT_NAME_REPLACEMENT: &str = "$PROJECT_NAME";
 
@@ -31,7 +33,6 @@ pub struct Project {
 #[derive(Debug, Deserialize)]
 pub struct ProjectTool {
     pub binary: String,
-    pub initializes_in_project_directory: bool,
     pub commands: ProjectToolCommands,
 }
 
@@ -60,13 +61,16 @@ pub struct CodeDirectories {
 pub struct FileSpec {
     pub contents: String,
     pub file: PathBuf,
-    pub variant: Option<String>,
+    #[serde(default)]
+    pub variant: CodeVariant,
 }
 
 pub fn load_configuration(project_name: &str, language: &str) -> TestDrivenConfig {
-    let path = format!("./templates/{language}.toml");
-    let toml_file = fs::read_to_string(path)
-        .expect("Unable to read toml in to string.")
-        .replace(PROJECT_NAME_REPLACEMENT, &project_name);
-    toml::from_str(&toml_file).expect("toml parsing failed.")
+
+    if let Some(template) = get_template(language) {
+        let template = template.replace(PROJECT_NAME_REPLACEMENT, &project_name);
+        toml::from_str(&template).expect("toml parsing failed.")
+    } else {
+        panic!();
+    }
 }

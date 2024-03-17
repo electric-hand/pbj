@@ -10,10 +10,9 @@ dev_dependencies = ["pytest"]
 
 [project.tool]
 binary = "poetry"
-initializes_in_project_directory = false
 
 [project.tool.commands]
-initialize = ["new", "$PROJECT_NAME"]
+initialize = ["new", "--name", "$PROJECT_NAME", "."]
 add_dependency = ["add"]
 add_development_dependency = ["add", "--group", "dev"]
 run_tests = ["run", "pytest"]
