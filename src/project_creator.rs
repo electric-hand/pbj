@@ -1,11 +1,12 @@
-use crate::config::{FileSpec, ProjectTool, TestDrivenConfig};
-use crate::parser::CodeVariant;
+use crate::config::{FileSpec, ProjectTool, TestDrivenConfig, default_variant};
 use std::collections::HashMap;
 use std::fs::File;
 use std::io::Write;
 use std::path::PathBuf;
 use std::process::{Command, Stdio};
 use std::{env, fs, io};
+
+use String as CodeVariant;
 
 pub fn create_project(
     project_name: &str,
@@ -15,8 +16,16 @@ pub fn create_project(
 ) {
     check_binaries(config);
     initialize_root(project_name, prefix, config);
-    add_dependencies(config);
-    add_dev_dependencies(config);
+    add_dependencies(
+        &config.project.tool.binary,
+        &config.project.tool.commands.add_dependency,
+        &config.project.dependencies,
+    );
+    add_dependencies(
+        &config.project.tool.binary,
+        &config.project.tool.commands.add_development_dependency,
+        &config.project.dev_dependencies,
+    );
     write_all_files(config, variant)
 }
 
@@ -43,34 +52,20 @@ fn mkdirhier(path: &PathBuf) -> io::Result<()> {
     Ok(())
 }
 
-fn add_dependencies(config: &TestDrivenConfig) {
-    for dep in &config.project.dependencies {
-        add_dependency(
-            &config.project.tool.binary,
-            &config.project.tool.commands.add_dependency,
-            dep,
-        )
+fn add_dependencies(tool_binary: &String, add_commands: &Vec<String>, packages: &Vec<String>) {
+    if packages.len() == 0 {
+        return;
     }
+    let mut args = add_commands.clone();
+    args.append(packages.clone().as_mut());
+    run_command(tool_binary, &args, "")
 }
 
-fn add_dev_dependencies(config: &TestDrivenConfig) {
-    for dep in &config.project.dev_dependencies {
-        add_dependency(
-            &config.project.tool.binary,
-            &config.project.tool.commands.add_development_dependency,
-            dep,
-        )
-    }
-}
-
-fn add_dependency(command: &str, args: &Vec<String>, dependency: &str) {
-    let mut args: Vec<String> = args.clone();
-    args.push(dependency.to_string());
-    run_command(
-        command,
-        &args,
-        &format!("Failed to add dependency {}", dependency),
-    );
+fn run_silent_command(command: &str, args: &Vec<String>, error_message: &str) {
+    Command::new(command)
+        .args(args)
+        .output()
+        .expect(error_message);
 }
 
 fn run_command(command: &str, args: &Vec<String>, error_message: &str) {
@@ -96,9 +91,9 @@ fn write_all_files(config: &TestDrivenConfig, variant: &CodeVariant) {
     write_files(config_files, PathBuf::from(""), variant);
 }
 
-fn write_files(file_map: &Vec<FileSpec>, base_prefix: PathBuf, variant: &CodeVariant) {
-    let file_map = get_files(file_map, variant);
-    for (_, file_spec) in file_map {
+fn write_files(files: &Vec<FileSpec>, base_prefix: PathBuf, variant: &CodeVariant) {
+    let file_map = collect_files_from_variants(files, variant);
+    for file_spec in file_map.values() {
         let path = base_prefix.join(&file_spec.file);
         let dirs = path.parent().expect("gimme the parent").to_path_buf();
         // TODO: This is unsafe.  the path should be checked prior to creation
@@ -109,7 +104,7 @@ fn write_files(file_map: &Vec<FileSpec>, base_prefix: PathBuf, variant: &CodeVar
     }
 }
 
-fn get_files<'a>(
+fn collect_files_from_variants<'a>(
     file_list: &'a Vec<FileSpec>,
     variant: &CodeVariant,
 ) -> HashMap<&'a PathBuf, &'a FileSpec> {
@@ -119,7 +114,7 @@ fn get_files<'a>(
         if &file.variant == variant {
             source_files.insert(&file.file, file);
         }
-        if &file.variant == &CodeVariant::Basic && !source_files.contains_key(&file.file) {
+        if &file.variant == &default_variant() && !source_files.contains_key(&file.file) {
             source_files.insert(&file.file, file);
         }
     }
@@ -127,11 +122,11 @@ fn get_files<'a>(
 }
 
 fn check_binaries(config: &TestDrivenConfig) {
-    run_command(&config.language.binary, &Vec::new(), &format!(
+    run_silent_command(&config.language.binary, &Vec::new(), &format!(
         "language binary {} not found! Check that it is excecutable from the shell this is running from.",
         &config.language.binary));
 
-    run_command(&config.project.tool.binary, &Vec::new(), &format!(
+    run_silent_command(&config.project.tool.binary, &Vec::new(), &format!(
             "project tool binary {} not found! Check that it is excecutable from the shell this is running from.",
             &config.project.tool.binary
         ));

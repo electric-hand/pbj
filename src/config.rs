@@ -1,7 +1,6 @@
 #![allow(dead_code)]
 use serde::Deserialize;
 use std::path::PathBuf;
-use crate::parser::CodeVariant;
 
 use crate::templates::get_template;
 
@@ -61,8 +60,13 @@ pub struct CodeDirectories {
 pub struct FileSpec {
     pub contents: String,
     pub file: PathBuf,
-    #[serde(default)]
+    #[serde(default = "default_variant")]
     pub variant: CodeVariant,
+}
+
+use String as CodeVariant;
+pub fn default_variant() -> String {
+    "default".to_string()
 }
 
 pub fn load_configuration(project_name: &str, language: &str) -> TestDrivenConfig {
