@@ -32,48 +32,29 @@ add_development_dependency = ["add", "--save-dev"]
 run_tests = ["test"]
 
 [[project.post.commands]]
-command = "npx"
+command = "pnpm"
+args = ["pkg", "set", "name=$PROJECT_NAME"]
+
+[[project.post.commands]]
+command = "pnpm"
 args = [
-  "npm-add-script",
-  "-k",
-  "start-dev",
-  "-v",
-  "npx ts-node-dev --respawn --pretty --transpile-only src/index.ts",
-  "--force",
+  "pkg",
+  "set",
+  "scripts.start-dev=npx ts-node-dev --respawn --pretty --transpile-only src/index.ts",
 ]
 
 [[project.post.commands]]
-command = "npx"
-args = [
-  "npm-add-script",
-  "-k",
-  "test",
-  "-v",
-  "npx jest",
-  "--force",
-]
+command = "pnpm"
+args = ["pkg", "set", "scripts.test=npx jest"]
 
 [[project.post.commands]]
-command = "npx"
-args = [
-  "npm-add-script",
-  "-k",
-  "prettier",
-  "-v",
-  "npx prettier . --write",
-  "--force",
-]
+command = "pnpm"
+args = ["pkg", "set", "scripts.prettier=npx prettier . --write"]
 
 [[project.post.commands]]
-command = "npx"
-args = [
-  "npm-add-script",
-  "-k",
-  "lint",
-  "-v",
-  "npx eslint .",
-  "--force",
-]
+command = "pnpm"
+args = ["pkg", "set", "scripts.lint=npx eslint ."]
+
 
 [code.directories]
 source = "src"
