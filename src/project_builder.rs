@@ -1,4 +1,4 @@
-use crate::config::{default_variant, FileSpec, ProjectPost, ProjectTool, TestDrivenConfig};
+use crate::template_toml::{default_variant, FileSpec, ProjectPost, ProjectTool, ProjectTemplate};
 use std::collections::HashMap;
 use std::fs::File;
 use std::io::Write;
@@ -6,31 +6,29 @@ use std::path::PathBuf;
 use std::process::{Command, Stdio};
 use std::{env, fs, io};
 
-use String as CodeVariant;
-
 pub fn create_project(
     project_name: &str,
     prefix: &str,
-    config: &TestDrivenConfig,
-    variant: &CodeVariant,
+    template: &ProjectTemplate,
+    variant: &String,
 ) {
-    check_binaries(config);
-    initialize_root(project_name, prefix, config);
+    check_binaries(template);
+    initialize_root(project_name, prefix, template);
     add_dependencies(
-        &config.project.tool.binary,
-        &config.project.tool.commands.add_dependency,
-        &config.project.dependencies,
+        &template.project.tool.binary,
+        &template.project.tool.commands.add_dependency,
+        &template.project.dependencies,
     );
     add_dependencies(
-        &config.project.tool.binary,
-        &config.project.tool.commands.add_development_dependency,
-        &config.project.dev_dependencies,
+        &template.project.tool.binary,
+        &template.project.tool.commands.add_development_dependency,
+        &template.project.dev_dependencies,
     );
-    write_all_files(config, variant);
-    run_post_commands(&config.project.post);
+    write_all_files(template, variant);
+    run_post_commands(&template.project.post);
 }
 
-fn initialize_root(project_name: &str, prefix: &str, config: &TestDrivenConfig) {
+fn initialize_root(project_name: &str, prefix: &str, config: &ProjectTemplate) {
     let project_directory = PathBuf::from(vec![prefix, project_name].concat());
 
     mkdirhier(&project_directory).expect("Could not create project directory");
@@ -78,21 +76,21 @@ fn run_command(command: &str, args: &Vec<String>, error_message: &str) {
         .expect(error_message);
 }
 
-fn write_all_files(config: &TestDrivenConfig, variant: &CodeVariant) {
-    let source_dir = PathBuf::from(&config.code.directories.source);
-    let test_dir = PathBuf::from(&config.code.directories.test);
+fn write_all_files(template: &ProjectTemplate, variant: &String) {
+    let source_dir = PathBuf::from(&template.code.directories.source);
+    let test_dir = PathBuf::from(&template.code.directories.test);
 
-    let source_code_files = &config.code.source;
+    let source_code_files = &template.code.source;
     write_files(source_code_files, source_dir, variant);
 
-    let test_code_files = &config.code.test;
+    let test_code_files = &template.code.test;
     write_files(test_code_files, test_dir, variant);
 
-    let config_files = &config.config;
+    let config_files = &template.config;
     write_files(config_files, PathBuf::from(""), variant);
 }
 
-fn write_files(files: &Vec<FileSpec>, base_prefix: PathBuf, variant: &CodeVariant) {
+fn write_files(files: &Vec<FileSpec>, base_prefix: PathBuf, variant: &String) {
     let file_map = collect_files_from_variants(files, variant);
     for file_spec in file_map.values() {
         let path = base_prefix.join(&file_spec.file);
@@ -107,7 +105,7 @@ fn write_files(files: &Vec<FileSpec>, base_prefix: PathBuf, variant: &CodeVarian
 
 fn collect_files_from_variants<'a>(
     file_list: &'a Vec<FileSpec>,
-    variant: &CodeVariant,
+    variant: &String,
 ) -> HashMap<&'a PathBuf, &'a FileSpec> {
     let mut source_files: HashMap<&PathBuf, &FileSpec> = HashMap::new();
 
@@ -122,14 +120,14 @@ fn collect_files_from_variants<'a>(
     return source_files;
 }
 
-fn check_binaries(config: &TestDrivenConfig) {
-    run_silent_command(&config.language.binary, &Vec::new(), &format!(
+fn check_binaries(template: &ProjectTemplate) {
+    run_silent_command(&template.language.binary, &Vec::new(), &format!(
         "language binary {} not found! Check that it is excecutable from the shell this is running from.",
-        &config.language.binary));
+        &template.language.binary));
 
-    run_silent_command(&config.project.tool.binary, &Vec::new(), &format!(
+    run_silent_command(&template.project.tool.binary, &Vec::new(), &format!(
             "project tool binary {} not found! Check that it is excecutable from the shell this is running from.",
-            &config.project.tool.binary
+            &template.project.tool.binary
         ));
 }
 

@@ -12,6 +12,7 @@ dev_dependencies = [
   "ts-node",
   "ts-node-dev",
   "jest",
+  "@jest/globals",
   "@types/jest",
   "ts-jest",
   "eslint",
@@ -22,10 +23,10 @@ dev_dependencies = [
 ]
 
 [project.tool]
-binary = "npm"
+binary = "pnpm"
 
 [project.tool.commands]
-initialize = ["create", "-y"]
+initialize = ["init"]
 add_dependency = ["add"]
 add_development_dependency = ["add", "--save-dev"]
 run_tests = ["test"]

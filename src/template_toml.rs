@@ -2,12 +2,12 @@
 use serde::Deserialize;
 use std::path::PathBuf;
 
-use crate::templates::get_template;
+use crate::files::get_template;
 
 const PROJECT_NAME_REPLACEMENT: &str = "$PROJECT_NAME";
 
 #[derive(Debug, Deserialize)]
-pub struct TestDrivenConfig {
+pub struct ProjectTemplate {
     pub language: Language,
     pub project: Project,
     pub code: Code,
@@ -73,16 +73,15 @@ pub struct FileSpec {
     pub contents: String,
     pub file: PathBuf,
     #[serde(default = "default_variant")]
-    pub variant: CodeVariant,
+    pub variant: String,
 }
 
-use String as CodeVariant;
 pub fn default_variant() -> String {
     "default".to_string()
 }
 
-pub fn load_configuration(project_name: &str, language: &str) -> TestDrivenConfig {
-    if let Some(template) = get_template(language) {
+pub fn load_project_template(project_name: &str, template: &str) -> ProjectTemplate {
+    if let Some(template) = get_template(template) {
         let template = template.replace(PROJECT_NAME_REPLACEMENT, &project_name);
         toml::from_str(&template).expect("toml parsing failed.")
     } else {
