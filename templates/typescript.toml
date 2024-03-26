@@ -55,7 +55,6 @@ args = ["pkg", "set", "scripts.prettier=npx prettier . --write"]
 command = "pnpm"
 args = ["pkg", "set", "scripts.lint=npx eslint ."]
 
-
 [code.directories]
 source = "src"
 test = "test"
