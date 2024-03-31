@@ -1,4 +1,4 @@
-# Pretty Bad Jenerator
+# Pretty Badass Jenerator
 
 ## Alternative Acronymics
 * Project Builder Joyfest
@@ -6,4 +6,20 @@
 * Pretty Big Jest
 
 ## About
-This 
+This tool generates projects declaritively based on a simple toml format.  It currently has built in support for generating `npm/node/typescript` projects (with pettier, eslint, and jest) and `poetry/python` with pytest.
+
+## Why?
+There are other project generators out there, mostly in the javascript space (yeoman, npm based create scripts), but I wanted something fully declarative where I could inspect the project declaration and understand _exactly_ what it is doing. Also I wanted to bang on in some Rust.
+
+## Usage
+The easiest way to use is simply to copy either the typescript or python templates from this repo and customize for your toolset.
+
+### Preconditions
+Your chosen project must:
+
+- have a binary used to execute code (`python`, `node`, etc.)
+- have a tool to manage projects
+- said tool needs to be able to:
+  - initialize projects
+  - add dependencies as a list
+  - run unit tests

@@ -1,6 +1,7 @@
 #![allow(dead_code)]
+use log::error;
 use serde::Deserialize;
-use std::path::PathBuf;
+use std::{path::PathBuf, process};
 
 use crate::files::get_template;
 
@@ -85,6 +86,7 @@ pub fn load_project_template(project_name: &str, template: &str) -> ProjectTempl
         let template = template.replace(PROJECT_NAME_REPLACEMENT, &project_name);
         toml::from_str(&template).expect("toml parsing failed.")
     } else {
-        panic!();
+        error!("Failed to load project template for {}!\nPlease check that the template \"{}.toml\" exists and is in your \"templates\" directory.", template, template);
+        process::exit(1);
     }
 }
