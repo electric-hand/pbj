@@ -3,9 +3,8 @@ use log::error;
 use serde::Deserialize;
 use std::{path::PathBuf, process};
 
-use crate::files::get_template;
+use crate::{constants::{DEFAULT_VARIANT_VALUE, PROJECT_NAME_REPLACEMENT}, files::get_template};
 
-const PROJECT_NAME_REPLACEMENT: &str = "$PROJECT_NAME";
 
 #[derive(Debug, Deserialize)]
 pub struct ProjectTemplate {
@@ -78,7 +77,7 @@ pub struct FileSpec {
 }
 
 pub fn default_variant() -> String {
-    "default".to_string()
+    DEFAULT_VARIANT_VALUE.to_string()
 }
 
 pub fn load_project_template(project_name: &str, template: &str) -> ProjectTemplate {

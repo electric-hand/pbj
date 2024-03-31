@@ -1,9 +1,10 @@
-use crate::template_toml::{default_variant, FileSpec, ProjectPost, ProjectTool, ProjectTemplate};
+use crate::template_toml::{default_variant, FileSpec, ProjectPost, ProjectTemplate, ProjectTool};
+use log::{error, info, trace};
 use std::collections::HashMap;
 use std::fs::File;
 use std::io::Write;
 use std::path::PathBuf;
-use std::process::{Command, Stdio};
+use std::process::Command;
 use std::{env, fs, io};
 
 pub fn create_project(
@@ -57,23 +58,25 @@ fn add_dependencies(tool_binary: &String, add_commands: &Vec<String>, packages: 
     }
     let mut args = add_commands.clone();
     args.append(packages.clone().as_mut());
-    run_command(tool_binary, &args, "")
+    run_command(tool_binary, &args)
 }
 
-fn run_silent_command(command: &str, args: &Vec<String>, error_message: &str) {
-    Command::new(command)
-        .args(args)
-        .output()
-        .expect(error_message);
+fn run_silent_command(command: &str, args: &Vec<String>) {
+    Command::new(command).args(args).output().unwrap();
 }
 
-fn run_command(command: &str, args: &Vec<String>, error_message: &str) {
-    Command::new(command)
-        .args(args)
-        .stdout(Stdio::inherit())
-        .stderr(Stdio::inherit())
-        .output()
-        .expect(error_message);
+fn run_command(command: &str, args: &Vec<String>) {
+    let cmd = Command::new(command).args(args).output().unwrap();
+    let stdout = String::from_utf8(cmd.stdout).unwrap();
+    let stderr = String::from_utf8(cmd.stderr).unwrap();
+    info!("Running command \"{}\" with args {:?}\n", command, args);
+    if !cmd.status.success() {
+        error!("Command {} did not exit cleanly:", command);
+        error!("{}", stderr);
+        error!("{}", stdout);
+    } else {
+        trace!("{}", stdout);
+    }
 }
 
 fn write_all_files(template: &ProjectTemplate, variant: &String) {
@@ -94,12 +97,11 @@ fn write_files(files: &Vec<FileSpec>, base_prefix: PathBuf, variant: &String) {
     let file_map = collect_files_from_variants(files, variant);
     for file_spec in file_map.values() {
         let path = base_prefix.join(&file_spec.file);
-        let dirs = path.parent().expect("gimme the parent").to_path_buf();
+        let dirs = path.parent().unwrap().to_path_buf();
         // TODO: This is unsafe.  the path should be checked prior to creation
-        mkdirhier(&dirs).expect("message");
-        let mut file = File::create(&path).expect("couldn't create file");
-        file.write_all(file_spec.contents.as_bytes())
-            .expect("Couldn't write the file contents");
+        mkdirhier(&dirs).unwrap();
+        let mut file = File::create(&path).expect("Unable to write file.");
+        file.write_all(file_spec.contents.as_bytes()).unwrap();
     }
 }
 
@@ -121,35 +123,20 @@ fn collect_files_from_variants<'a>(
 }
 
 fn check_binaries(template: &ProjectTemplate) {
-    run_silent_command(&template.language.binary, &Vec::new(), &format!(
-        "language binary {} not found! Check that it is excecutable from the shell this is running from.",
-        &template.language.binary));
-
-    run_silent_command(&template.project.tool.binary, &Vec::new(), &format!(
-            "project tool binary {} not found! Check that it is excecutable from the shell this is running from.",
-            &template.project.tool.binary
-        ));
+    info!("CHECKING BINARIES...");
+    run_silent_command(&template.language.binary, &Vec::new());
+    run_silent_command(&template.project.tool.binary, &Vec::new());
+    info!("CHECKING BINARIES SUCCESSFUL!");
 }
 
 fn initialize_directory(project_tool: &ProjectTool) {
-    run_command(
-        &project_tool.binary,
-        &project_tool.commands.initialize,
-        &format!(
-            "Unable to initialize directory using tool: {} and arguments: {:?}",
-            project_tool.binary, project_tool.commands.initialize
-        ),
-    );
+    run_command(&project_tool.binary, &project_tool.commands.initialize);
 }
 
 fn run_post_commands(post: &Option<ProjectPost>) {
     if let Some(post) = post {
         for command in &post.commands {
-            let error_message = format!(
-                "Unable to run command {} with args {:?}",
-                &command.command, &command.args
-            );
-            run_command(&command.command, &command.args, &error_message)
+            run_command(&command.command, &command.args)
         }
     }
 }

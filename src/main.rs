@@ -1,7 +1,7 @@
 use clap::Parser;
 use log::info;
 use pbj::config_toml::load_config;
-use pbj::constants::{DEFAULT_PREFIX, DEFAULT_PREFIX_SEPARATOR, DEFAULT_TEMPLATE, DEFAULT_VARIANT};
+use pbj::constants::{DEFAULT_PREFIX, DEFAULT_PREFIX_SEPARATOR, DEFAULT_TEMPLATE, DEFAULT_VARIANT_VALUE};
 use pbj::parser::Cli;
 use pbj::project_builder::create_project;
 use pbj::template_toml::load_project_template;
@@ -23,7 +23,7 @@ fn main() {
         .unwrap_or(DEFAULT_PREFIX_SEPARATOR.to_string());
     let variant = args
         .variant
-        .unwrap_or(config.variant.unwrap_or(DEFAULT_VARIANT.to_string()));
+        .unwrap_or(config.variant.unwrap_or(DEFAULT_VARIANT_VALUE.to_string()));
 
     let prefix = match prefix.as_str() {
         "" => "",
