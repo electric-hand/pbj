@@ -83,7 +83,7 @@ pub fn default_variant() -> String {
 pub fn load_project_template(project_name: &str, template: &str) -> ProjectTemplate {
     if let Some(template) = get_template(template) {
         let template = template.replace(PROJECT_NAME_REPLACEMENT, &project_name);
-        toml::from_str(&template).expect("toml parsing failed.")
+        toml::from_str(&template).expect(format!("Failed to parse project template {}.", template).as_str())
     } else {
         error!("Failed to load project template for {}!\nPlease check that the template \"{}.toml\" exists and is in your \"templates\" directory.", template, template);
         process::exit(1);

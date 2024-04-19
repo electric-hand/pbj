@@ -1,5 +1,4 @@
 use clap::Parser;
-use log::info;
 use pbj::config_toml::load_config;
 use pbj::constants::{DEFAULT_PREFIX, DEFAULT_PREFIX_SEPARATOR, DEFAULT_TEMPLATE, DEFAULT_VARIANT_VALUE};
 use pbj::parser::Cli;
@@ -35,8 +34,4 @@ fn main() {
 
     let template = load_project_template(&project_name, &template_key);
     create_project(&project_name, &prefix, &template, &variant);
-    info!(
-        "Successfully created your {} project {}.  Happy Coding!",
-        template_key, project_name
-    );
 }

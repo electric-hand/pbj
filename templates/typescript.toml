@@ -61,8 +61,8 @@ test = "test"
 
 [[code.source]]
 contents = '''
-export function leetCodeFunction(arg1: string, arg2: string): string {
-  return arg1 + arg2;
+export function leet(arg1: string): number {
+  return arg1.length;
 }
 '''
 file = "main.ts"
@@ -102,15 +102,14 @@ file = "main.test.ts"
 [[code.test]]
 contents = '''
 import { describe, expect, test } from "@jest/globals";
-import { leetCodeFunction } from "../src/main";
+import { leet } from "../src/main";
 
 describe("tests should pass", () => {
   test("one", () => {
     const inputOne = "yes";
-    const inputTwo = "no";
-    const expectedOutput = "yesno";
-    const outputOne = leetCodeFunction(inputOne, inputTwo);
-    expect(outputOne).toEqual(expectedOutput);
+    const expectedOutput = 3;
+    const output = leet(inputOne);
+    expect(output).toEqual(expectedOutput);
   });
 });
 '''

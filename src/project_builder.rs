@@ -27,6 +27,10 @@ pub fn create_project(
     );
     write_all_files(template, variant);
     run_post_commands(&template.project.post);
+    info!(
+        "Successfully created your project: {}.  Happy Coding!",
+        project_name
+    );
 }
 
 fn initialize_root(project_name: &str, prefix: &str, config: &ProjectTemplate) {

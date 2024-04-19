@@ -23,8 +23,11 @@ test = "tests"
 
 [[code.source]]
 contents = '''
+from typing import Optional
+
 class Solution:
-    pass
+    def double(self, arg: Optional[int]) -> int:
+        return 2 * arg
 
 def main():
     print("Hello, World!")
@@ -33,6 +36,18 @@ if __name__ == '__main__':
     main()
 '''
 file = "main.py"
+variant = "leet"
+
+[[code.test]]
+contents = '''
+from $PROJECT_NAME import Solution
+
+def test_double():
+    sln = Solution()
+    assert 4 == sln.double(2)
+
+'''
+file = "test.py"
 variant = "leet"
 
 [[code.source]]
