@@ -40,14 +40,14 @@ variant = "leet"
 
 [[code.test]]
 contents = '''
-from $PROJECT_NAME import Solution
+from $PROJECT_NAME.main import Solution
 
 def test_double():
     sln = Solution()
     assert 4 == sln.double(2)
 
 '''
-file = "test.py"
+file = "test_main.py"
 variant = "leet"
 
 [[code.source]]
@@ -59,13 +59,13 @@ file = "main.py"
 
 [[code.test]]
 contents = '''
-from $PROJECT_NAME import sum
+from $PROJECT_NAME.main import sum
 
 def test_sum():
     assert 4 == sum(2, 2)
 
 '''
-file = "test.py"
+file = "test_main.py"
 
 [[config]]
 contents = '''
