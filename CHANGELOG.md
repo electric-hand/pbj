@@ -1,3 +1,9 @@
+## 0.2.3 (2024-05-08)
+
+### Fix
+
+- **metadat**: change url scheme to http to support temporary redirect to github of main project domain
+
 ## 0.2.2 (2024-05-08)
 
 ### Fix
