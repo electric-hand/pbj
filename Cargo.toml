@@ -2,8 +2,11 @@
 name = "pbj"
 version = "0.1.1"
 edition = "2021"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+license-file = "LICENSE"
+description = "Command line declarative software development project generator."
+homepage = "https://pbj.rodeo"
+repository = "https://github.com/electric-hand/pbj"
+readme = "README.adoc"
 
 [dependencies]
 clap = { version = "4.5.1", features = ["derive"] }
