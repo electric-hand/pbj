@@ -1,12 +1,12 @@
 [package]
 name = "pbj"
-version = "0.2.1"
+version = "0.2.2"
 edition = "2021"
 license-file = "LICENSE"
 description = "Command line utility for generating tdd projects from declarative configurations."
 homepage = "https://pbj.rodeo"
 repository = "https://github.com/electric-hand/pbj"
-readme = "docs/README.html"
+readme = "docs/README.md"
 categories = ["command-line-utilities", "development-tools"]
 keywords = ["tdd", "softwaredev", "programming"]
 

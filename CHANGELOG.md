@@ -1,3 +1,9 @@
+## 0.2.2 (2024-05-08)
+
+### Fix
+
+- **README.adoc**: add generated markdown version of documentation for crates.io
+
 ## 0.2.1 (2024-05-08)
 
 ## 0.2.0 (2024-05-08)
