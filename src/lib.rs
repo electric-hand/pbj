@@ -1,6 +1,5 @@
-pub mod config_toml;
-pub mod template_toml;
+pub mod toml;
 pub mod parser;
-pub mod project_builder;
+pub mod commands;
 pub mod files;
 pub mod constants;

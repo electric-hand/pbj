@@ -1,4 +1,4 @@
-use crate::template_toml::{default_variant, FileSpec, ProjectPost, ProjectTemplate, ProjectTool};
+use crate::toml::template::{default_variant, FileSpec, ProjectPost, ProjectTemplate, ProjectTool};
 use log::{error, info, trace};
 use std::collections::HashMap;
 use std::fs::File;

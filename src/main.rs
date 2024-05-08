@@ -1,9 +1,9 @@
 use clap::Parser;
-use pbj::config_toml::load_config;
+use pbj::toml::config::load_config;
 use pbj::constants::{DEFAULT_PREFIX, DEFAULT_PREFIX_SEPARATOR, DEFAULT_TEMPLATE, DEFAULT_VARIANT_VALUE};
 use pbj::parser::{Cli, Commands};
-use pbj::project_builder::create_project;
-use pbj::template_toml::load_project_template;
+use pbj::commands::generate::create_project;
+use pbj::toml::template::load_project_template;
 
 fn main() {
     colog::init();

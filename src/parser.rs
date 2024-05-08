@@ -29,5 +29,6 @@ pub enum Commands {
         variant: Option<String>,
     },
 
+    // print a list of built in templates
     BuiltIns
 }
