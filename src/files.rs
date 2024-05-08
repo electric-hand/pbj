@@ -1,6 +1,6 @@
 use std::{fs::read_to_string, path::PathBuf};
 
-use log::{error, info};
+use log::{error, info, trace};
 
 const PYTHON_TOML: &str = include_str!("../templates/python.toml");
 const TYPESCRIPT: &str = include_str!("../templates/typescript.toml");
@@ -12,7 +12,8 @@ const TEMPLATE_DIR: &str = "templates";
 
 fn get_template_path(template: &str) -> PathBuf {
     let template = format!("{}.toml", template);
-    PathBuf::from_iter(vec![TEMPLATE_DIR.to_string(), template].iter())
+    let template = vec![TEMPLATE_DIR.to_string(), template];
+    PathBuf::from_iter(template.iter())
 }
 
 pub fn get_default_file_contents(key: &str) -> Option<&str> {
@@ -22,12 +23,6 @@ pub fn get_default_file_contents(key: &str) -> Option<&str> {
         "typescript" => Some(TYPESCRIPT),
         "config" => Some(CONFIG),
         _ => None,
-    };
-
-    if result.is_some() {
-        info!("unable to find file for \"{key}\", found and using contents from built-in default");
-    } else {
-        error!("unable to find file for \"{key}\"and no built-in contents found");
     };
 
     result
@@ -66,9 +61,13 @@ pub fn get_template(template_name: &str) -> Option<String> {
     let template = get_template_path(template_name);
     if let Some(contents) = get_file(&template) {
         return Some(contents);
+    } else {
+        trace!("template not found at path: \"{:?}\" looking for default contents...", template)
     }
     if let Some(contents) = get_default_file_contents(&template_name) {
         return Some(contents.to_string());
+    } else {
+        error!("default contents not found for template {}.", template_name)
     }
     None
 }

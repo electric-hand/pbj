@@ -1,8 +1,7 @@
 [language]
 binary = "python"
 version = "3.10"
-name = "python"
-file_extension = "py"
+name = "poetry python"
 
 [project]
 dependencies = []
@@ -22,52 +21,48 @@ source = "$PROJECT_NAME"
 test = "tests"
 
 [[code.source]]
+file = "main.py"
+variant = "leet"
 contents = '''
-from typing import Optional
+from typing import Optional, List
 
 class Solution:
     def double(self, arg: Optional[int]) -> int:
         return 2 * arg
 
-def main():
-    print("Hello, World!")
-
-if __name__ == '__main__':
-    main()
 '''
-file = "main.py"
-variant = "leet"
 
 [[code.test]]
+file = "test_main.py"
+variant = "leet"
 contents = '''
 from $PROJECT_NAME.main import Solution
 
-def test_double():
+def test_it():
     sln = Solution()
     assert 4 == sln.double(2)
 
 '''
-file = "test_main.py"
-variant = "leet"
 
 [[code.source]]
+file = "main.py"
 contents = '''
 def sum(addend: int, addend_two: int) -> int:
     return addend + addend_two
 '''
-file = "main.py"
 
 [[code.test]]
+file = "test_main.py"
 contents = '''
 from $PROJECT_NAME.main import sum
 
-def test_sum():
+def test_it():
     assert 4 == sum(2, 2)
 
 '''
-file = "test_main.py"
 
 [[config]]
+file = ".vscode/settings.json"
 contents = '''
 {
     "python.testing.pytestArgs": [
@@ -77,4 +72,3 @@ contents = '''
     "python.testing.pytestEnabled": true
 }
 '''
-file = ".vscode/settings.json"

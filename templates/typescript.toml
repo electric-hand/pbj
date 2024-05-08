@@ -1,6 +1,5 @@
 [language]
 binary = "node"
-file_extension = "ts"
 name = "typescript"
 version = "3.10"
 
@@ -60,23 +59,26 @@ source = "src"
 test = "test"
 
 [[code.source]]
+file = "main.ts"
+variant = "leet"
 contents = '''
 export function leet(arg1: string): number {
   return arg1.length;
 }
 '''
-file = "main.ts"
-variant = "leet"
+
 
 [[code.source]]
+file = "main.ts"
 contents = '''
 export function _(input: number[]): number[] {
   return [];
 }
 '''
-file = "main.ts"
+
 
 [[code.test]]
+file = "main.test.ts"
 contents = '''
 import { describe, expect, test } from "@jest/globals";
 import { _ } from "../src/main";
@@ -97,9 +99,10 @@ describe("tests should pass", () => {
   });
 });
 '''
-file = "main.test.ts"
 
 [[code.test]]
+file = "main.test.ts"
+variant = "leet"
 contents = '''
 import { describe, expect, test } from "@jest/globals";
 import { leet } from "../src/main";
@@ -113,19 +116,20 @@ describe("tests should pass", () => {
   });
 });
 '''
-file = "main.test.ts"
-variant = "leet"
+
 
 [[config]]
+file = "jest.config.js"
 contents = '''
 module.exports = {
   preset: "ts-jest",
   testEnvironment: "node",
 };
 '''
-file = "jest.config.js"
+
 
 [[config]]
+file = "tsconfig.json"
 contents = '''
 {
   "compilerOptions": {
@@ -141,9 +145,9 @@ contents = '''
   "lib": ["es2015"]
 }
 '''
-file = "tsconfig.json"
 
 [[config]]
+file = ".eslintrc.js"
 contents = '''
 module.exports = {
   env: {
@@ -165,4 +169,3 @@ module.exports = {
   rules: {},
 };
 '''
-file = ".eslintrc.js"
