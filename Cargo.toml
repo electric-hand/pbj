@@ -8,7 +8,7 @@ homepage = "https://pbj.rodeo"
 repository = "https://github.com/electric-hand/pbj"
 readme = "README.adoc"
 categories = ["command-line-utilities", "development-tools"]
-keywords = ["TDD", "software development", "programming", "project generator"]
+keywords = ["tdd", "softwaredev", "programming"]
 
 [dependencies]
 clap = { version = "4.5.1", features = ["derive"] }
