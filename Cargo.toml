@@ -6,7 +6,7 @@ license-file = "LICENSE"
 description = "Command line utility for generating tdd projects from declarative configurations."
 homepage = "https://pbj.rodeo"
 repository = "https://github.com/electric-hand/pbj"
-readme = "README.adoc"
+readme = "doc/README.html"
 categories = ["command-line-utilities", "development-tools"]
 keywords = ["tdd", "softwaredev", "programming"]
 
