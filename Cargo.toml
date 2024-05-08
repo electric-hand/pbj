@@ -3,10 +3,12 @@ name = "pbj"
 version = "0.2.0"
 edition = "2021"
 license-file = "LICENSE"
-description = "Command line declarative software development project generator."
+description = "Command line utility for generating tdd projects from declarative configurations."
 homepage = "https://pbj.rodeo"
 repository = "https://github.com/electric-hand/pbj"
 readme = "README.adoc"
+categories = ["command-line-utilities", "development-tools"]
+keywords = ["TDD", "software development", "programming", "project generator"]
 
 [dependencies]
 clap = { version = "4.5.1", features = ["derive"] }
