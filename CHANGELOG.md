@@ -1,3 +1,9 @@
+## 0.2.4 (2024-05-08)
+
+### Refactor
+
+- add modules and rename for clarity
+
 ## 0.2.3 (2024-05-08)
 
 ### Fix
