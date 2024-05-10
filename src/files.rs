@@ -2,9 +2,11 @@ use std::{fs::read_to_string, path::PathBuf};
 
 use log::{error, info, trace};
 
-const PYTHON_TOML: &str = include_str!("../templates/python.toml");
-const TYPESCRIPT: &str = include_str!("../templates/typescript.toml");
-const CONFIG: &str = include_str!("../default_config.toml");
+use crate::constants::{CONFIG_FILE_NAME, PYTHON_TEMPLATE_KEY, TYPESCRIPT_TEMPLATE_KEY};
+
+const PYTHON_TEMPLATE_CONTENTS: &str = include_str!("../templates/python.toml");
+const TYPESCRIPT_TEMPLATE_CONTENTS: &str = include_str!("../templates/typescript.toml");
+const DEFAULT_CONFIG_CONTENTS: &str = include_str!("../default_config.toml");
 const CONFIG_DIR: &str = ".config";
 
 const APP_DIR: &str = "pbj";
@@ -19,9 +21,9 @@ fn get_template_path(template: &str) -> PathBuf {
 pub fn get_default_file_contents(key: &str) -> Option<&str> {
 
     let result = match key {
-        "python" => Some(PYTHON_TOML),
-        "typescript" => Some(TYPESCRIPT),
-        "config" => Some(CONFIG),
+        PYTHON_TEMPLATE_KEY => Some(PYTHON_TEMPLATE_CONTENTS),
+        TYPESCRIPT_TEMPLATE_KEY => Some(TYPESCRIPT_TEMPLATE_CONTENTS),
+        CONFIG_FILE_NAME => Some(DEFAULT_CONFIG_CONTENTS),
         _ => None,
     };
 
