@@ -1,3 +1,9 @@
+## 0.2.5 (2024-05-10)
+
+### Fix
+
+- fixed name for default config contents lookup
+
 ## 0.2.4 (2024-05-08)
 
 ### Refactor
