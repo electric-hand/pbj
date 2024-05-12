@@ -1,9 +1,7 @@
 use clap::Parser;
-use pbj::toml::config::load_config;
-use pbj::constants::{DEFAULT_PREFIX, DEFAULT_PREFIX_SEPARATOR, DEFAULT_TEMPLATE, DEFAULT_VARIANT_VALUE};
+use pbj::toml::config::Config;
 use pbj::parser::{Cli, Commands};
-use pbj::commands::generate::create_project;
-use pbj::toml::template::load_project_template;
+use pbj::commands::generate::generate;
 
 fn main() {
     colog::init();
@@ -12,28 +10,11 @@ fn main() {
 
     match cli.command {
         Commands::Generate { prefix, project_name, template, variant } => {
-            let config = load_config();
-
-            let template_key = template
-                .unwrap_or(config.template.unwrap_or(DEFAULT_TEMPLATE.to_string()));
-            let mut prefix = prefix.unwrap_or(DEFAULT_PREFIX.to_string());
-            let prefix_separator = config
-                .prefix_separator
-                .unwrap_or(DEFAULT_PREFIX_SEPARATOR.to_string());
-            let variant = variant
-                .unwrap_or(config.variant.unwrap_or(DEFAULT_VARIANT_VALUE.to_string()));
-        
-            let prefix = match prefix.as_str() {
-                "" => "",
-                _ => {
-                    prefix.push_str(&prefix_separator);
-                    &prefix
-                }
-            
-            };
-        
-            let template = load_project_template(&project_name, &template_key);
-            create_project(&project_name, &prefix, &template, &variant);
+            let config = Config::load();
+            let template_key = config.get_template_key(&template);
+            let prefix = config.get_prefix(&prefix);
+            let variant = config.get_variant(&variant);
+            generate(prefix, project_name, template_key, variant);
         },
         Commands::BuiltIns => {
             todo!()

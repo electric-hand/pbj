@@ -1,4 +1,4 @@
-use crate::toml::template::{default_variant, FileSpec, ProjectPost, ProjectTemplate, ProjectTool};
+use crate::toml::template::{default_variant, load_project_template, FileSpec, ProjectPost, ProjectTemplate, ProjectTool};
 use log::{error, info, trace};
 use std::collections::HashMap;
 use std::fs::File;
@@ -6,6 +6,14 @@ use std::io::Write;
 use std::path::PathBuf;
 use std::process::Command;
 use std::{env, fs, io};
+
+pub fn generate(prefix: String, project_name: String, template_key: String, variant: String) {
+
+
+    let template = load_project_template(&project_name, &template_key);
+    create_project(&project_name, &prefix, &template, &variant);
+
+}
 
 pub fn create_project(
     project_name: &str,
