@@ -30,7 +30,7 @@ pub fn get_default_file_contents(key: &str) -> Option<&str> {
     result
 }
 
-pub fn get_file(file: &PathBuf) -> Option<String> {
+pub fn read_file(file: &PathBuf) -> Option<String> {
     let dot_config_path = dirs::home_dir()?.join(CONFIG_DIR).join(APP_DIR).join(&file);
 
     let local_os_config_path = dirs::config_local_dir()?.join(APP_DIR).join(&file);
@@ -61,7 +61,7 @@ fn print_loading(path: &PathBuf) {
 
 pub fn get_template(template_name: &str) -> Option<String> {
     let template = get_template_path(template_name);
-    if let Some(contents) = get_file(&template) {
+    if let Some(contents) = read_file(&template) {
         return Some(contents);
     } else {
         trace!("template not found at path: \"{:?}\" looking for default contents...", template)

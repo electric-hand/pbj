@@ -7,7 +7,7 @@ use crate::constants::{
     CONFIG_FILE_NAME, DEFAULT_PREFIX_SEPARATOR, DEFAULT_TEMPLATE,
     DEFAULT_VARIANT_VALUE,
 };
-use crate::files::{get_default_file_contents, get_file};
+use crate::files::{get_default_file_contents, read_file};
 
 #[derive(Debug, Deserialize)]
 pub struct Config {
@@ -47,7 +47,7 @@ impl Config {
     }
 
     pub fn load() -> Self {
-        if let Some(config) = get_file(&PathBuf::from(CONFIG_FILE_NAME)) {
+        if let Some(config) = read_file(&PathBuf::from(CONFIG_FILE_NAME)) {
             toml::from_str(&config).expect("toml parsing failed.")
         } else {
             toml::from_str(

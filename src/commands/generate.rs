@@ -7,22 +7,12 @@ use std::path::PathBuf;
 use std::process::Command;
 use std::{env, fs, io};
 
-pub fn generate(prefix: String, project_name: String, template_key: String, variant: String) {
+pub fn generate(prefix: &str, project_name: &str, template_key: &str, variant: &str) {
 
 
-    let template = load_project_template(&project_name, &template_key);
-    create_project(&project_name, &prefix, &template, &variant);
-
-}
-
-pub fn create_project(
-    project_name: &str,
-    prefix: &str,
-    template: &ProjectTemplate,
-    variant: &String,
-) {
-    check_binaries(template);
-    initialize_root(project_name, prefix, template);
+    let template = load_project_template(project_name, template_key);
+    check_binaries(&template);
+    initialize_root(project_name, prefix, &template);
     add_dependencies(
         &template.project.tool.binary,
         &template.project.tool.commands.add_dependency,
@@ -33,7 +23,7 @@ pub fn create_project(
         &template.project.tool.commands.add_development_dependency,
         &template.project.dev_dependencies,
     );
-    write_all_files(template, variant);
+    write_all_files(&template, variant);
     run_post_commands(&template.project.post);
     info!(
         "Successfully created your project: {}.  Happy Coding!",
@@ -91,7 +81,7 @@ fn run_command(command: &str, args: &Vec<String>) {
     }
 }
 
-fn write_all_files(template: &ProjectTemplate, variant: &String) {
+fn write_all_files(template: &ProjectTemplate, variant: &str) {
     let source_dir = PathBuf::from(&template.code.directories.source);
     let test_dir = PathBuf::from(&template.code.directories.test);
 
@@ -105,7 +95,7 @@ fn write_all_files(template: &ProjectTemplate, variant: &String) {
     write_files(config_files, PathBuf::from(""), variant);
 }
 
-fn write_files(files: &Vec<FileSpec>, base_prefix: PathBuf, variant: &String) {
+fn write_files(files: &Vec<FileSpec>, base_prefix: PathBuf, variant: &str) {
     let file_map = collect_files_from_variants(files, variant);
     for file_spec in file_map.values() {
         let path = base_prefix.join(&file_spec.file);
@@ -119,7 +109,7 @@ fn write_files(files: &Vec<FileSpec>, base_prefix: PathBuf, variant: &String) {
 
 fn collect_files_from_variants<'a>(
     file_list: &'a Vec<FileSpec>,
-    variant: &String,
+    variant: &str,
 ) -> HashMap<&'a PathBuf, &'a FileSpec> {
     let mut source_files: HashMap<&PathBuf, &FileSpec> = HashMap::new();
 

@@ -14,7 +14,7 @@ fn main() {
             let template_key = config.get_template_key(&template);
             let prefix = config.get_prefix(&prefix);
             let variant = config.get_variant(&variant);
-            generate(prefix, project_name, template_key, variant);
+            generate(&prefix, &project_name, &template_key, &variant);
         },
         Commands::BuiltIns => {
             todo!()
