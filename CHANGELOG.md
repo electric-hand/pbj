@@ -1,3 +1,10 @@
+## 0.2.6 (2024-05-13)
+
+### Refactor
+
+- shifting responsibility to config, refactoring for clarity
+- add slightly clearer and better string handling for defaults and the like.  move logic for figuring out settings
+
 ## 0.2.5 (2024-05-10)
 
 ### Fix
