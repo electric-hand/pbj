@@ -91,8 +91,9 @@ fn write_all_files(template: &ProjectTemplate, variant: &str) {
     let test_code_files = &template.code.test;
     write_files(test_code_files, test_dir, variant);
 
-    let config_files = &template.config;
-    write_files(config_files, PathBuf::from(""), variant);
+    if let Some(config_files) = &template.config {
+        write_files(config_files, PathBuf::from(""), variant);
+    }
 }
 
 fn write_files(files: &Vec<FileSpec>, base_prefix: PathBuf, variant: &str) {
@@ -132,7 +133,9 @@ fn check_binaries(template: &ProjectTemplate) {
 }
 
 fn initialize_directory(project_tool: &ProjectTool) {
-    run_command(&project_tool.binary, &project_tool.commands.initialize);
+    for command in &project_tool.commands.initializers {
+        run_command(&project_tool.binary, &command);
+    }
 }
 
 fn run_post_commands(post: &Option<ProjectPost>) {

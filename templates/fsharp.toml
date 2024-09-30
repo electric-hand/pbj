@@ -1,0 +1,58 @@
+[language]
+binary = "dotnet"
+version = "8.0"
+name = "fsharp dotnet"
+
+[project]
+dependencies = []
+dev_dependencies = []
+
+[project.tool]
+binary = "dotnet"
+
+[project.tool.commands]
+initializers = [
+    ["new", "sln"],
+    ["new", "console", "-lang", "F#", "-n", "$PROJECT_NAME"],
+    ["sln", "add", "$PROJECT_NAME/$PROJECT_NAME.fsproj"],
+    ["new", "xunit", "-lang", "F#", "-n", "$PROJECT_NAME.Tests"],
+    ["sln", "add", "$PROJECT_NAME.Tests/$PROJECT_NAME.Tests.fsproj"],
+    ["add", "$PROJECT_NAME.Tests/$PROJECT_NAME.Tests.fsproj", "reference", "$PROJECT_NAME/$PROJECT_NAME.fsproj"],
+    ["restore"],
+]
+add_dependency = ["add"]
+add_development_dependency = ["add", "--group", "dev"]
+run_tests = ["test"]
+
+[code.directories]
+source = "$PROJECT_NAME"
+test = "$PROJECT_NAME.Tests"
+
+[[code.source]]
+file = "Program.fs"
+contents = '''
+namespace $PROJECT_NAME
+
+open System
+
+module Program =
+    [<EntryPoint>]
+    let main argv =
+        printfn "Hello from F#"
+        0
+'''
+
+[[code.test]]
+file = "Tests.fs"
+contents = '''
+namespace $PROJECT_NAME.Tests
+
+open Xunit
+open Xunit.Abstractions
+
+type Tests(output: ITestOutputHelper) =
+    [<Fact>]
+    let test() = 
+        Assert.True(true)
+
+'''

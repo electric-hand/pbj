@@ -25,7 +25,7 @@ dev_dependencies = [
 binary = "pnpm"
 
 [project.tool.commands]
-initialize = ["init"]
+initializers = [["init"]]
 add_dependency = ["add"]
 add_development_dependency = ["add", "--save-dev"]
 run_tests = ["test"]

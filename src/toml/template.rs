@@ -11,7 +11,7 @@ pub struct ProjectTemplate {
     pub language: Language,
     pub project: Project,
     pub code: Code,
-    pub config: Vec<FileSpec>,
+    pub config: Option<Vec<FileSpec>>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -38,7 +38,7 @@ pub struct ProjectTool {
 
 #[derive(Debug, Deserialize)]
 pub struct ProjectToolCommands {
-    pub initialize: Vec<String>,
+    pub initializers: Vec<Vec<String>>,
     pub add_development_dependency: Vec<String>,
     pub add_dependency: Vec<String>,
     pub run_tests: Vec<String>,

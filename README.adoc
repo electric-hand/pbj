@@ -111,8 +111,8 @@ The project tool used for initialization, dependency management and running test
 
 ==== `[project.tool.commands]`
 ====
-initialize::
-Command for the `project.tool` that initializes a new project using the `project.tool.binary`
+initializers::
+List of commands for the `project.tool` that initialize a new project using the `project.tool.binary`. Commands will be run in sequence specified.
 
 add_dependency::
 Command and arguments to add "production" dependencies.
