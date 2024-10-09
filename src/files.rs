@@ -2,11 +2,26 @@ use std::{fs::read_to_string, path::PathBuf};
 
 use log::{error, info, trace};
 
-use crate::constants::{CONFIG_FILE_NAME, PYTHON_TEMPLATE_KEY, TYPESCRIPT_TEMPLATE_KEY, FSHARP_TEMPLATE_KEY};
+use crate::constants::CONFIG_FILE_NAME;
+
+const PYTHON_TEMPLATE_KEY: &str = "python";
+const TYPESCRIPT_TEMPLATE_KEY: &str = "typescript";
+const FSHARP_TEMPLATE_KEY: &str = "fsharp";
+const GO_TEMPLATE_KEY: &str = "go";
 
 const PYTHON_TEMPLATE_CONTENTS: &str = include_str!("../templates/python.toml");
 const TYPESCRIPT_TEMPLATE_CONTENTS: &str = include_str!("../templates/typescript.toml");
 const FSHARP_TEMPLATE_CONTENTS: &str = include_str!("../templates/fsharp.toml");
+const GO_TEMPLATE_CONTENTS: &str = include_str!("../templates/go.toml");
+
+const DEFAULT_FILE_CONTENTS: [(&str, &str); 5] = [
+    (PYTHON_TEMPLATE_KEY, PYTHON_TEMPLATE_CONTENTS),
+    (TYPESCRIPT_TEMPLATE_KEY, TYPESCRIPT_TEMPLATE_CONTENTS),
+    (GO_TEMPLATE_KEY, GO_TEMPLATE_CONTENTS),
+    (FSHARP_TEMPLATE_KEY, FSHARP_TEMPLATE_CONTENTS),
+    (CONFIG_FILE_NAME, DEFAULT_CONFIG_CONTENTS)
+];
+
 const DEFAULT_CONFIG_CONTENTS: &str = include_str!("../default_config.toml");
 const CONFIG_DIR: &str = ".config";
 
@@ -20,16 +35,10 @@ fn get_template_path(template: &str) -> PathBuf {
 }
 
 pub fn get_default_file_contents(key: &str) -> Option<&str> {
-
-    let result = match key {
-        PYTHON_TEMPLATE_KEY => Some(PYTHON_TEMPLATE_CONTENTS),
-        TYPESCRIPT_TEMPLATE_KEY => Some(TYPESCRIPT_TEMPLATE_CONTENTS),
-        FSHARP_TEMPLATE_KEY => Some(FSHARP_TEMPLATE_CONTENTS),
-        CONFIG_FILE_NAME => Some(DEFAULT_CONFIG_CONTENTS),
-        _ => None,
-    };
-
-    result
+    return DEFAULT_FILE_CONTENTS
+        .iter()
+        .find(|&&(cand, _)| cand == key)
+        .map(|(_, content)| *content);
 }
 
 pub fn read_file(file: &PathBuf) -> Option<String> {
@@ -66,7 +75,10 @@ pub fn get_template(template_name: &str) -> Option<String> {
     if let Some(contents) = read_file(&template) {
         return Some(contents);
     } else {
-        trace!("template not found at path: \"{:?}\" looking for default contents...", template)
+        trace!(
+            "template not found at path: \"{:?}\" looking for default contents...",
+            template
+        )
     }
     if let Some(contents) = get_default_file_contents(&template_name) {
         return Some(contents.to_string());

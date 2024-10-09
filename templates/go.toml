@@ -1,64 +1,53 @@
 [language]
-binary = "python"
-version = "3.10"
-name = "poetry python"
+binary = "go"
+version = "go1.22.3"
+name = "golang"
 
 [project]
 dependencies = []
-dev_dependencies = ["pytest"]
+dev_dependencies = []
 
 [project.tool]
-binary = "poetry"
+binary = "go"
 
 [project.tool.commands]
-initializers = [["new", "--name", "$PROJECT_NAME", "."]]
+initializers = [["mod", "init", "$PROJECT_NAME"]]
 add_dependency = ["add"]
 add_development_dependency = ["add", "--group", "dev"]
-run_tests = ["run", "pytest"]
+run_tests = ["test"]
 
 [code.directories]
-source = "$PROJECT_NAME"
-test = "tests"
+source = "."
+test = "."
 
 [[code.source]]
-file = "main.py"
-variant = "leet"
+file = "main.go"
 contents = '''
-from typing import Optional, List
+   package main
 
-class Solution:
-    def double(self, arg: Optional[int]) -> int:
-        return 2 * arg
+   func Add(a, b int) int {
+       return a + b
+   }
 
+   func main() {
+       // Main function can be empty for now
+   }
 '''
 
 [[code.test]]
-file = "test_main.py"
-variant = "leet"
+file = "main_test.go"
 contents = '''
-from $PROJECT_NAME.main import Solution
+package main
 
-def test_it():
-    sln = Solution()
-    assert 4 == sln.double(2)
+   import "testing"
 
-'''
-
-[[code.source]]
-file = "main.py"
-contents = '''
-def sum(addend: int, addend_two: int) -> int:
-    return addend + addend_two
-'''
-
-[[code.test]]
-file = "test_main.py"
-contents = '''
-from $PROJECT_NAME.main import sum
-
-def test_it():
-    assert 4 == sum(2, 2)
-
+   func TestAdd(t *testing.T) {
+       result := Add(2, 3)
+       expected := 5
+       if result != expected {
+           t.Errorf("Add(2, 3) = %d; want %d", result, expected)
+       }
+   }
 '''
 
 [[config]]
