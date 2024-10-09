@@ -12,7 +12,8 @@ pub enum Commands {
     #[command(visible_alias="g")]
     /// Generate a project using a declarative template
     Generate {
-        /// a prefix to use for the main directory (will be prepended to the projects name)
+        /// a prefix to use for the main directory (will be prepended to the projects name).
+        /// The prefix is not used in the generated project, only to create a unique base directory name
         #[arg(short, long)]
         prefix: Option<String>,
 
@@ -29,6 +30,7 @@ pub enum Commands {
         variant: Option<String>,
     },
 
-    // print a list of built in templates
-    BuiltIns
+    /// print a list of built in templates [NOOP]
+    BuiltIns,
+
 }

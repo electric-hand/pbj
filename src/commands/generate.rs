@@ -1,4 +1,6 @@
-use crate::toml::template::{default_variant, load_project_template, FileSpec, ProjectPost, ProjectTemplate, ProjectTool};
+use crate::toml::template::{
+    default_variant, load_project_template, FileSpec, ProjectPost, ProjectTemplate, ProjectTool,
+};
 use log::{error, info, trace};
 use std::collections::HashMap;
 use std::fs::File;
@@ -7,12 +9,18 @@ use std::path::PathBuf;
 use std::process::Command;
 use std::{env, fs, io};
 
-pub fn generate(prefix: &str, project_name: &str, template_key: &str, variant: &str) {
-
-
+/// Generate a project using a declarative template
+///
+/// # Arguments
+///
+/// * `prefix` - The prefix to use for the root project directory name. (e.g. "my_project" with prefix "foo" will create a project in a directory called "foo_my_project")
+/// * `project_name` - The name of the project to generate.
+/// * `template_key` - The template to use for project generation (python, typescript, etc)
+/// * `variant` - The variant of files to select for overiding defaults. Variants are defined in the template file.
+pub fn generate(project_name_prefix: &str, project_name: &str, template_key: &str, variant: &str) {
     let template = load_project_template(project_name, template_key);
     check_binaries(&template);
-    initialize_root(project_name, prefix, &template);
+    initialize_root(project_name, project_name_prefix, &template);
     add_dependencies(
         &template.project.tool.binary,
         &template.project.tool.commands.add_dependency,
@@ -143,5 +151,55 @@ fn run_post_commands(post: &Option<ProjectPost>) {
         for command in &post.commands {
             run_command(&command.command, &command.args)
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use tempfile::tempdir;
+
+    #[test]
+    fn test_generate_python_project() -> io::Result<()> {
+        let temp_dir = tempdir()?;
+        let project_name = "test_python_project";
+        let base_dir = temp_dir.path();
+        let project_path = base_dir.join(project_name);
+
+        env::set_current_dir(&base_dir).expect(&format!(
+            "Unable to set {:?} as the current dir for further initialization",
+            &base_dir
+        ));
+
+        //Verify that the project directory does not already exist
+        assert!(!project_path.exists());
+
+        generate("", &project_name, "python", "default");
+
+        // Verify that the project directory was created
+        assert!(project_path.exists());
+        assert!(project_path.is_dir());
+
+        // Verify that the main Python file was created
+        let main_file = project_path.join(project_name).join("main.py");
+        assert!(main_file.exists());
+        assert!(main_file.is_file());
+
+        // Verify that the test file was created
+        let test_file = project_path.join("tests").join("test_main.py");
+        assert!(test_file.exists());
+        assert!(test_file.is_file());
+
+        // Verify that the .vscode directory and settings.json were created
+        let vscode_settings = project_path.join(".vscode").join("settings.json");
+        assert!(vscode_settings.exists());
+        assert!(vscode_settings.is_file());
+
+        // Verify that pyproject.toml was created (Poetry project file)
+        let pyproject_toml = project_path.join("pyproject.toml");
+        assert!(pyproject_toml.exists());
+        assert!(pyproject_toml.is_file());
+
+        Ok(())
     }
 }

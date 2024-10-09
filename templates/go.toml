@@ -1,0 +1,74 @@
+[language]
+binary = "python"
+version = "3.10"
+name = "poetry python"
+
+[project]
+dependencies = []
+dev_dependencies = ["pytest"]
+
+[project.tool]
+binary = "poetry"
+
+[project.tool.commands]
+initializers = [["new", "--name", "$PROJECT_NAME", "."]]
+add_dependency = ["add"]
+add_development_dependency = ["add", "--group", "dev"]
+run_tests = ["run", "pytest"]
+
+[code.directories]
+source = "$PROJECT_NAME"
+test = "tests"
+
+[[code.source]]
+file = "main.py"
+variant = "leet"
+contents = '''
+from typing import Optional, List
+
+class Solution:
+    def double(self, arg: Optional[int]) -> int:
+        return 2 * arg
+
+'''
+
+[[code.test]]
+file = "test_main.py"
+variant = "leet"
+contents = '''
+from $PROJECT_NAME.main import Solution
+
+def test_it():
+    sln = Solution()
+    assert 4 == sln.double(2)
+
+'''
+
+[[code.source]]
+file = "main.py"
+contents = '''
+def sum(addend: int, addend_two: int) -> int:
+    return addend + addend_two
+'''
+
+[[code.test]]
+file = "test_main.py"
+contents = '''
+from $PROJECT_NAME.main import sum
+
+def test_it():
+    assert 4 == sum(2, 2)
+
+'''
+
+[[config]]
+file = ".vscode/settings.json"
+contents = '''
+{
+    "python.testing.pytestArgs": [
+        "tests"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true
+}
+'''

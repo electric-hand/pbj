@@ -4,11 +4,13 @@
 == TL;DR
 **pbj** is a command line tool to generate sensible tdd software development projects from declarative templates written in TOML.
 
-**__Typescript__** and **__Python__** project templates are built in. Just <<_installation, install>> it and go.
+**__Typescript__**, **__Python__**, and **__F#__** project templates are built in. Just <<_installation, install>> it and go.
 
 `pbj generate -t python __PROJECT_NAME__`
 
 `pbj generate -t typescript __PROJECT_NAME__`
+
+`pbj generate -t fsharp __PROJECT_NAME__`
 
 See the <<_templates>> section for details on customization and <<Origin>> for why this tool exists.
 

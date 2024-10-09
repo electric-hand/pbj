@@ -89,3 +89,4 @@ pub fn load_project_template(project_name: &str, template: &str) -> ProjectTempl
         process::exit(1);
     }
 }
+
